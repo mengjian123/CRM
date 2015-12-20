@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.atguigu.crm.daos.CustomerEditMapper">
+	
+	<select id="getCustomerInfoById" parameterType="map" resultType="com.atuigu.crm.entity.Customer">
+	<!-- select * from(
+	SELECT cus.id, cus.no ,cus.chief,cus.name, cus.region , c.name as "manager.name" ,
+	cus.customer_level as "level", cus.state 
+	FROM customers cus left outer join contacts c on c.customer_id = cus.manager_id
+	left outer join customer cust on contacts.customer_id = cust.id  where cus.id =#{id}) -->
+	
+	
+<!-- 	select * from
+(  SELECT cus.id, cus.no ,cus.chief,cus.name, cus.region ,
+ c.name as "manager.name" ,  cus.customer_level as "level", cus.state  
+  FROM customers cus left outer join contacts c on c.customer_id = cus.manager_id 
+    where cus.id =#{id}) -->
+    
+       SELECT cus.id, cus.no ,cus.chief,cus.name, cus.region ,cus.address,
+     cus.bank, cus.bank_account as "bankAccount",
+    cus.bankroll, cus.credit,cus.fax,cus.licence_no as "licenceNo", cus.local_tax_no as "localTaxNo",
+    cus.satify , cus.tel, cus.turnover, cus.websit, cus.zip,cus.national_tax_no as NationalTaxNo,
+ c.name as "manager.name" ,  cus.customer_level as "level", cus.state  
+  FROM customers cus left outer join contacts c on c.customer_id = cus.manager_id 
+    where cus.id =#{id}
+	</select>
+	
+	<select id="getManager"  resultType="com.atuigu.crm.entity.Contact">
+	select * from contacts c  left outer join customers cus on c.customer_id=cus.manager_id
+	</select>
+	
+	
+	<update id="updateCustomerById" parameterType="map">
+	update customers SET name=#{name} ,   region = #{region} ,  customer_level =#{level} ,  state =#{state},   satify=#{satify} ,  credit =#{credit},
+	  address =#{address} ,   zip =#{zip},   tel =#{tel},   fax =#{fax},
+	  websit=#{websit},   licence_No=#{licenceNo},   chief=#{chief} ,  bankroll=#{bankroll},
+	  turnover=#{turnover},   bank=#{bank},   bank_Account= #{bankAccount},  local_Tax_No=#{localTaxNo},
+	  national_Tax_No=#{nationalTaxNo} 
+	  where id =#{id}
+	</update>
+	<!-- 
+		,   region = #{region} ,  manager_id=#{manager.id},customer_level =#{level} ,  state =#{state},   satify=#{satify} ,  credit =#{credit},
+	  address =#{address} ,   zip =#{zip},   tel =#{tel},   fax =#{fax},
+	  websit=#{websit},   licence_No=#{licenceNo},   chief=#{chief} ,  bankroll=#{bankroll},
+	  turnover=#{turnover},   bank=#{bank},   bank_Account= #{bankAccount},  local_Tax_No=#{localTaxNo},
+	  national_Tax_No=#{nationalTaxNo} 
+	 -->
+<!-- 
+Example:
+update customers set name= 'PWC' ,  region = 'China' ,manager_id=142,
+  customer_level ='standard' , state = 'normal' , satify= 'not Known' , credit ='not known',
+  address ='this address' , zip =13210,  tel =2342341,  fax ='no fax',
+	 websit='www.pwc.com',  licence_No=1231413, chief=1413 , bankroll=45254,
+	 turnover=1234135,  bank='Chase', bank_Account= 'fgasdfgads', local_Tax_No='gagaf34123',
+	 national_Tax_No='12311s' where id =8
+ -->
+
+</mapper>

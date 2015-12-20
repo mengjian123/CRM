@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.crm.daos.SerMapper">
+		
+	<sql id="salesChanceQueryCondition">
+			WHERE created_id = #{createdId}
+			<if test="serviceType !=null">
+				AND service_type LIKE #{serviceType}
+			</if>
+			<if test="serviceTitle !=null">
+				AND service_title LIKE #{serviceTitle}
+			</if>
+			
+	<!-- 	<if test="customer.name!=null">
+				AND customer.name LIKE #{customer.name}
+			</if> -->
+	</sql>
+	
+	<select id="getCustomer" parameterType="map" resultType="com.atuigu.crm.entity.Customer">
+		SELECT id,name from customers
+	</select>
+	
+	
+	<select id="getTotalAmount" resultType="long">
+		SELECT count(id) from customer_services 
+		<include refid="salesChanceQueryCondition"/>
+	</select>
+	
+	<resultMap type="com.atuigu.crm.entity.CustomerService" id="basemeMap">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="serviceType" column="service_type"/>
+		<result property="serviceTitle" column="service_title"/>
+		<result property="customer.id" column="customer_id"/>
+		<result property="createdby.id" column="created_id"/>
+		
+<!-- 		<association property="customer" javaType="com.atuigu.crm.entity.Customer">
+			<result property="id" column="id"/>
+			<result property="name" column="name"/>
+		</association> -->
+		
+		<association property="customer" column="customer_id" 
+		select="com.atguigu.crm.daos.SerMapper.getCustomerById"></association>
+		
+<!-- 		<association property="createdby" javaType="com.atuigu.crm.entity.User">
+			<result property="id" column="id"/>
+			<result property="name" column="name"/>
+		</association>  -->
+		
+		<association property="createdby" column="created_id" 
+		select="com.atguigu.crm.daos.SerMapper.getUserById"></association>
+
+	
+	</resultMap>
+	
+	
+	<select id="getContent" parameterType="map" resultMap="basemeMap">
+		SELECT * FROM (
+			SELECT rownum rn,id,create_date,service_type,
+			service_title,customer_id,created_id
+			FROM customer_services
+			<include refid="salesChanceQueryCondition"/>
+			) 
+			<![CDATA[
+				WHERE rn >= #{fromIndex} AND rn < #{endIndex}
+			]]>
+	</select>
+	
+	
+	
+</mapper>

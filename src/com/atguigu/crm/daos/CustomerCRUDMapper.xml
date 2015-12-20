@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.crm.daos.CustomerCRUDMapper">
+	
+	<resultMap type="com.atuigu.crm.entity.Contact" id="baseMap">
+		<result property="id" column="id"/>
+ 		<result property="name" column="name"/>
+ 		<result property="memo" column="memo"/>
+ 		<result property="customer.id" column="customer_id"/>
+ 		<result property="mobile" column="mobile"/>
+ 		<result property="position" column="position"/>
+ 		<result property="sex" column="sex"/>
+ 		<result property="tel" column="tel"/>
+	</resultMap>
+	
+	<select id="getContont" parameterType="map" resultMap="baseMap">
+		SELECT * FROM (
+			SELECT rownum rn,id,memo,mobile,name,position,sex,tel,customer_id
+			FROM contacts
+			WHERE customer_id =#{id}
+			) 
+			<![CDATA[
+				WHERE rn >= #{fromIndex} AND rn < #{endIndex}
+			]]>
+	</select>
+	
+	
+	
+	
+</mapper>

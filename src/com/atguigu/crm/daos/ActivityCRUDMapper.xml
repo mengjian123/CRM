@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.crm.daos.ActivityCRUDMapper">
+	
+	<resultMap type="com.atuigu.crm.entity.CustomerActivity" id="baseMap">
+		<result property="id" column="id"/>
+ 		<result property="description" column="description"/>
+ 		<result property="title" column="title"/>
+ 		<result property="customer.id" column="customer_id"/>
+ 		<result property="place" column="place"/>
+ 		<result property="date" column="activity_date"/>
+	</resultMap>
+	
+	<select id="getContont" parameterType="map" resultMap="baseMap">
+		SELECT * FROM (
+			SELECT rownum rn,id,description,title,place,activity_date,customer_id
+			FROM CUSTOMER_ACTIVITIES
+			WHERE customer_id =#{id}
+			) 
+			<![CDATA[
+				WHERE rn >= #{fromIndex} AND rn < #{endIndex}
+			]]>
+	</select>
+	
+	
+	<!--为什么  注解不好用，文字与字符串不匹配   而xml配置文件就好用了  -->
+	<update id="update" parameterType="com.atuigu.crm.entity.CustomerActivity">
+		update CUSTOMER_ACTIVITIES SET ACTIVITY_DATE=#{date},place=#{place},title=#{title},
+			description=#{description}			  
+			 where id=#{id}
+	</update>
+	
+</mapper>
