@@ -42,7 +42,7 @@ public class ActivityCRUDHandler {
 		//将customerid放进去
 		Map<String,Object> params = new HashMap<String, Object>();
 		params.put("id", customerid);
-		
+		System.out.println("不错哈哈");
 		//2. 调用 Service 方法得到 Page 对象.
 		Page<CustomerActivity> page = activityCRUDService.getPage(pageNo,4,params);
 		
